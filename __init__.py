@@ -2,8 +2,9 @@ from bs4 import BeautifulSoup
 import requests
 import csv
 
-def scrape_carrier(carried_id):
+def scrape_carrier(carrier_id):
     """"scrape the page of one carrier"""
+    print(f"Attempting Carrier ID: {carrier_id}")
     URL = f"https://ai.fmcsa.dot.gov/SMS/Carrier/{carrier_id}/CarrierRegistration.aspx"
     page = requests.get(URL)
 
@@ -25,19 +26,21 @@ def scrape_carrier(carried_id):
 
 def parse_carrier_ids(fp):
     """parse carriers ids to put into scraper"""
-    with open(fp, 'r') as csvfile:
+    with open(fp, encoding='windows-1252') as csvfile:
         reader = csv.reader(csvfile)
         CARRIER_ID_COLUMN_INDEX = 0
+        # ignore header row
+        reader.__next__()
         ids = [row[CARRIER_ID_COLUMN_INDEX] for row in reader]
     return ids
 
 def write_carrier_results(results):
     """writes carrier information into joinable csvs"""
     with open('data/carrier.csv', 'a') as carrier_file:
-        csv.writer(carrier_file).write_row(results[0])
+        csv.writer(carrier_file).writerow(results[0])
 
     with open('data/carrier_vehicle.csv', 'a') as carrier_vehicle_file:
-        csv.writer(carrier_vehicle_file).write_row(results[1])
+        csv.writer(carrier_vehicle_file).writerow(results[1])
 
 def main(fp):
     """scrape all carriers"""
