@@ -23,11 +23,12 @@ Then, we should also include all the carrier level attributes in a third csv tha
 There are some known bugs (and desired features) in [./todo.txt].
 
 ## Usage
-This project manages python dependencies with pipenv.
-If you have it installed, simply run `pipenv install` in the directory.
+This project manages python dependencies with [pipenv].
+Follow their instructions (in the link) to install [pipenv].
+Then, simply run `pipenv install` in this directory to install dependencies for this project.
 Next, start a `pipenv shell`.
-Then, calls to `python` or `ipython` (for development) will use the correct dependencies.
-To run this script, do `python __init__.py` (in the pipenv shell).
+Now, calls to `python` or `ipython` (for development) will use the correct dependencies.
+To run this script, do `python __init__.py` (in the [pipenv] shell).
 
 ## Design / Strategy
 To get going quickly, I used Beautiful Soup which is very flexible and easy to write.
@@ -62,3 +63,4 @@ Then, if we get another connection error, we should double the wait time and con
 Once, we are able to connect again, we may start halving the wait time or start over without one.
 Ideally, we'd add a tiny bit of randomness to the wait time so we don't get in sync with other periodic loads on the system.
 
+[pipenv]: https://docs.pipenv.org/
