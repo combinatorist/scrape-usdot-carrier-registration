@@ -1,6 +1,10 @@
+# bugs
+- structure results as meaningful csv
+- include carrier id in vehicle types to be able to join
+
+# features
 - download motor carrier list
-- include more of each page
+- include more attributes from each carrier page
 - handle schema changes
 - handle unicode
 - add warnings in code (or assertions)
-- add strategy to README
