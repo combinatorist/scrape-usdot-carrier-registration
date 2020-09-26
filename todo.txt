@@ -1,8 +1,6 @@
 - download motor carrier list
-- iterate over pages
 - include more of each page
-- write to csv (or database)
-- organize code into functions
-- add usage to README
-- add basic info to README
+- handle schema changes
+- handle unicode
+- add warnings in code (or assertions)
 - add strategy to README
