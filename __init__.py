@@ -22,7 +22,7 @@ def scrape_carrier(carrier_id):
     vehicle_type_rows = [item.find_parent('tr') for item in vehicle_type_soups]
     vehicle_type_table = [[item.text for item in row.find_all()] for row in vehicle_type_rows]
 
-    return (included_cargo, vehicle_type_table)
+    return (included_cargo, vehicle_type_table, carrier_id)
 
 def parse_carrier_ids(fp):
     """parse carriers ids to put into scraper"""
@@ -36,11 +36,14 @@ def parse_carrier_ids(fp):
 
 def write_carrier_results(results):
     """writes carrier information into joinable csvs"""
+    cargos, vehicles, carrier_id = results
     with open('data/carrier.csv', 'a') as carrier_file:
-        csv.writer(carrier_file).writerow(results[0])
+        for cargo in cargos:
+            csv.writer(carrier_file).writerow([carrier_id, cargo])
 
     with open('data/carrier_vehicle.csv', 'a') as carrier_vehicle_file:
-        csv.writer(carrier_vehicle_file).writerow(results[1])
+        for vehicle_type in vehicles:
+            csv.writer(carrier_vehicle_file).writerow([carrier_id, vehicle_type])
 
 def main(fp):
     """scrape all carriers"""
