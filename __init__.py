@@ -45,7 +45,7 @@ def write_carrier_results(results, directory):
 
     with open(os.path.join(directory, 'carrier_vehicle.csv'), 'a') as carrier_vehicle_file:
         for vehicle_type in vehicles:
-            csv.writer(carrier_vehicle_file).writerow([carrier_id, vehicle_type])
+            csv.writer(carrier_vehicle_file).writerow([carrier_id] + vehicle_type)
 
 def main(fp):
     """scrape all carriers"""
