@@ -1,6 +1,8 @@
 from bs4 import BeautifulSoup
 import requests
 import csv
+from datetime import datetime
+import os
 
 def scrape_carrier(carrier_id):
     """"scrape the page of one carrier"""
@@ -22,7 +24,7 @@ def scrape_carrier(carrier_id):
     vehicle_type_rows = [item.find_parent('tr') for item in vehicle_type_soups]
     vehicle_type_table = [[item.text for item in row.find_all()] for row in vehicle_type_rows]
 
-    return (included_cargo, vehicle_type_table)
+    return (included_cargo, vehicle_type_table, carrier_id)
 
 def parse_carrier_ids(fp):
     """parse carriers ids to put into scraper"""
@@ -34,20 +36,26 @@ def parse_carrier_ids(fp):
         ids = [row[CARRIER_ID_COLUMN_INDEX] for row in reader]
     return ids
 
-def write_carrier_results(results):
+def write_carrier_results(results, directory):
     """writes carrier information into joinable csvs"""
-    with open('data/carrier.csv', 'a') as carrier_file:
-        csv.writer(carrier_file).writerow(results[0])
+    cargos, vehicles, carrier_id = results
+    with open(os.path.join(directory, 'carrier.csv'), 'a') as carrier_file:
+        for cargo in cargos:
+            csv.writer(carrier_file).writerow([carrier_id, cargo])
 
-    with open('data/carrier_vehicle.csv', 'a') as carrier_vehicle_file:
-        csv.writer(carrier_vehicle_file).writerow(results[1])
+    with open(os.path.join(directory, 'carrier_vehicle.csv'), 'a') as carrier_vehicle_file:
+        for vehicle_type in vehicles:
+            csv.writer(carrier_vehicle_file).writerow([carrier_id] + vehicle_type)
 
 def main(fp):
     """scrape all carriers"""
     ids = parse_carrier_ids(fp)
+    runtime = datetime.now().isoformat()
+    directory = os.path.join('data', runtime)
+    os.mkdir(directory)
     for carrier_id in ids:
         results = scrape_carrier(carrier_id)
-        write_carrier_results(results)
+        write_carrier_results(results, directory)
 
 if __name__ == "__main__":
     main('FMCSA_CENSUS1_2020Aug/FMCSA_CENSUS1_2020Aug.txt')
